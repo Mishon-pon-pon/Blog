@@ -45,7 +45,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<div class="header">
 		<div class="container">
 			<div class="logo">
-				<a href="index.html"><img src="static/images/logo.jpg" title="" /></a>
+				<a href="/"><img src="static/images/logo.jpg" title="" /></a>
 			</div>
 			<!---start-top-nav---->
 			<div class="top-menu">
@@ -83,10 +83,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<div class="content-grid-info">
 							<img src="static/images/post1.jpg" alt="" />
 							<div class="post-info">
-								<h4><a href="single.html">{{.Title}}</a> July 30, 2014 / 27 Comments
+								<h4><a href="article?id={{.ID}}">{{.Title}}</a> July 30, 2014 / 27 Comments
 								</h4>
 								<p>{{.TextArticle}}</p>
-								<a href="static/single.html"><span></span>READ MORE</a>
+								<a href="article?id={{.ID}}"><span></span>READ MORE</a>
 							</div>
 						</div>
 						{{end}}
