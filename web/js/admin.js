@@ -18,7 +18,7 @@ function fn(url, obj) {
 }
 
 sendler.addEventListener("click", function () {
-    fn("/test", {
+    fn("/new", {
         Title: String(title.value),
         TextArticle: String(article.value)
     })
