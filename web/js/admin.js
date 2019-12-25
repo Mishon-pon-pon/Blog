@@ -18,8 +18,10 @@ function fn(url, obj) {
 }
 
 sendler.addEventListener("click", function () {
-    fn("/new", {
-        Title: String(title.value),
-        TextArticle: String(article.value)
-    })
+    if(String(title.value).length > 2 && String(article.value).length > 2) {
+        fn("/new", {
+            Title: String(title.value),
+            TextArticle: String(article.value)
+        })
+    }
 })

@@ -7,7 +7,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 html, body{
     font-size: 100%;
 	background-size:cover;
-	font-family: 'Oswald', sans-serif;	
+  font-family: 'Roboto Mono', monospace;
+  font-size: 17px;
+  color: #111;
+  line-height: normal;
 }
 body a{
 transition: 0.5s all ease;
@@ -20,7 +23,8 @@ h1,h2,h3,h4,h5,h6{
 	margin:0;			   
 }
 p{
-	margin:0;
+  margin:0;
+  font-family: 'Roboto Mono', monospace;
 }
 ul,label{
 	margin:0;
@@ -104,7 +108,7 @@ padding:2em;
 }
 .post-info h4{
 color:#afafaf;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 font-size:0.8em;
 margin-bottom:1em;
 }
@@ -122,7 +126,7 @@ text-transform:uppercase;
 color: #4a5054;
 }
 .post-info p{
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 color:#9a9da0;
 font-size:0.9em;
 line-height:1.5em;
@@ -201,7 +205,7 @@ display:block;
 .recent li a,.comments ul li a,.archives ul li a,.categories ul li a{
 color:#7C7C7C;
 border-bottom:1px solid #a6aaae;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 font-size: 0.9em;
 text-decoration: none;
 padding: 6px 0 0 0;
@@ -213,7 +217,7 @@ color:#7C7C7C;
 font-size: 0.9em;
 border-bottom:none;
 margin:0 5px;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 }
 .recent li a:hover,.comments ul li a:hover,.archives ul li a:hover,.categories ul li a:hover{
 color:#00aeff;
@@ -250,7 +254,7 @@ margin-bottom: 0.5em;
 }
 .about-grid p,.about-grid2 p,.who-iam p{
 color: #7C7C7C;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 font-size: 0.95em;
 line-height:1.8em;
 font-weight: 400;
@@ -261,7 +265,7 @@ list-style-image: url(../images/icon3.png);
 margin: 0 0 10px 20px;
 }
 .about-grid2 li a {
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 color: #9A9598;
 font-size: 0.9em;
 text-decoration: none;
@@ -287,7 +291,7 @@ margin-bottom: 0.5em;
 }
 .man-info li{
 color: #7C7C7C;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 font-size: 0.95em;
 margin-left:2em;
 padding:5px 0;
@@ -300,7 +304,7 @@ margin-bottom: 0.5em;
 }
 .contact-info p {
 color: #7C7C7C;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 font-size: 0.95em;
 line-height: 1.8em;
 font-weight: 400;
@@ -317,7 +321,7 @@ color: #C2C1CB;
 background: #fff;
 outline: none;
 font-weight: 400;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 transition: 0.5s all ease;
 -webkit-transition: 0.5s all ease;
 -moz-transition: 0.5s all ease;
@@ -353,7 +357,7 @@ margin-bottom:1em;
 .company_address p {
 font-size: 1em;
 color:#7C7C7C;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 line-height: 1.8em;
 }
 .company_address p a{
@@ -390,7 +394,7 @@ color:#fff;
 }
 /*----*/
 .single-grid p {
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 color: #9a9da0;
 font-size: 1em;
 line-height: 1.8em;
@@ -427,11 +431,11 @@ font-size: 1.2em;
 color: #848484;
 margin-top: 1em;
 display: inline-block;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 }
 .desc p a{
 color: #00aeff;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 }
 .desc p a:hover{
 color: #848484;
@@ -442,7 +446,7 @@ width: 100%;
 color: #333;
 font-size: 1em;
 border: 1px solid #F6F1DE;
-font-family: 'Lato', sans-serif;
+/* font-family: 'Lato', sans-serif; */
 outline: none;
 display: block;
 margin: 10px 0;

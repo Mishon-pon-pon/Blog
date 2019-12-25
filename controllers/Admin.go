@@ -120,7 +120,5 @@ func NewPost(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, msg, http.StatusBadRequest)
 		return
 	}
-	fmt.Println(a)
-	fmt.Fprintf(w, "Person: %+v", a)
 	dataBase.DBExec(`Insert into Articles(Title, TextArticle) Values('` + a.Title + `', '` + a.TextArticle + `')`)
 }

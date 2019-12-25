@@ -16,6 +16,8 @@ func main() {
 	mainMux.HandleFunc("/admin", controllers.Admin)
 	mainMux.HandleFunc("/new", controllers.NewPost)
 	mainMux.HandleFunc("/article", controllers.SingleArticle)
+	mainMux.HandleFunc("/contact", controllers.Contact)
+	mainMux.HandleFunc("/about", controllers.About)
 	fmt.Println("server run on 3003")
 	http.ListenAndServe(":3003", mainMux)
 }

@@ -14,7 +14,11 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 		"web/index.html",
 	))
 	articles := []models.Article{}
-	dataBase.DBQuery(`SELECT ArticleId, Title, substr(TextArticle, 0, 220) as TextArticle   FROM Articles`, func(result *sql.Rows) {
+	dataBase.DBQuery(`SELECT 
+						ArticleId, 
+						Title, 
+						substr(TextArticle, 0, 219) || ltrim(substr(TextArticle, 219, 220), ' ') || '...' as TextArticle   
+						FROM Articles`, func(result *sql.Rows) {
 		a := models.Article{}
 		for result.Next() {
 			err := result.Scan(&a.ID, &a.Title, &a.TextArticle)
