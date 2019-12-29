@@ -18,6 +18,12 @@ func main() {
 	mainMux.HandleFunc("/article", controllers.SingleArticle)
 	mainMux.HandleFunc("/contact", controllers.Contact)
 	mainMux.HandleFunc("/about", controllers.About)
+	mainMux.HandleFunc("/auth", controllers.Auth)
+	mainMux.HandleFunc("/userauth", func(w http.ResponseWriter, r *http.Request) {
+		n := r.URL.Query().Get("email")
+		fmt.Println(n)
+	})
+	// http.Get("http://localhost:3003/auth?email=123@123&password=qwe")
 	fmt.Println("server run on 3003")
-	http.ListenAndServe(":3003", mainMux)
+	http.ListenAndServe(":133", mainMux)
 }

@@ -14,7 +14,7 @@ function fn(url, obj) {
         redirect: 'follow', // manual, *follow, error
         referrer: 'no-referrer', // no-referrer, *client
         body: JSON.stringify(obj), // тип данных в body должен соответвовать значению заголовка "Content-Type"
-    }).then(res => res.json());
+    })
 }
 
 sendler.addEventListener("click", function () {

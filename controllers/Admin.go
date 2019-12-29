@@ -3,6 +3,7 @@ package controllers
 import (
 	"Blog/libs/dataBase"
 	"Blog/models"
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -17,14 +18,35 @@ import (
 
 //Admin - handler /admin
 func Admin(w http.ResponseWriter, r *http.Request) {
-	tmp := template.Must(template.ParseFiles(
-		"web/Admin.html",
-	))
-	tmp.Execute(w, nil)
+	e := r.URL.Query().Get("email")
+	p := r.URL.Query().Get("password")
+	dataBase.DBQuery(`Select * from Users where Email = '`+e+`' and Pass = '`+p+`'`, func(result *sql.Rows) {
+		u := models.User{}
+		for result.Next() {
+			err := result.Scan(&u.UserID, &u.Email, &u.Pass)
+			if err != nil {
+				panic(err)
+			}
+		}
+		if u.UserID != 0 {
+			tmp := template.Must(template.ParseFiles(
+				"web/Admin.html",
+			))
+			tmp.Execute(w, nil)
+		} else {
+			http.Redirect(w, r, "/auth", 301)
+		}
+	})
+
+}
+
+func auth(email string, pass string) bool {
+	return true
 }
 
 //NewPost - write new post into database
 func NewPost(w http.ResponseWriter, r *http.Request) {
+
 	// If the Content-Type header is present, check that it has the value
 	// application/json. Note that we are using the gddo/httputil/header
 	// package to parse and extract the value here, so the check works
@@ -121,4 +143,5 @@ func NewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	dataBase.DBExec(`Insert into Articles(Title, TextArticle) Values('` + a.Title + `', '` + a.TextArticle + `')`)
+
 }
