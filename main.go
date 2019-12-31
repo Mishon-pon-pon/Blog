@@ -23,7 +23,6 @@ func main() {
 		n := r.URL.Query().Get("email")
 		fmt.Println(n)
 	})
-	// http.Get("http://localhost:3003/auth?email=123@123&password=qwe")
 	fmt.Println("server run on 3003")
-	http.ListenAndServe(":133", mainMux)
+	http.ListenAndServe(":3003", mainMux)
 }
