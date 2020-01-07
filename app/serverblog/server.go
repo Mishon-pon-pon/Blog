@@ -1,7 +1,7 @@
 package serverblog
 
 import (
-	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -27,10 +27,14 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (s *server) configureRouter() {
 	s.router.HandleFunc("/", s.handleIndex()).Methods("GET")
+	s.router.PathPrefix("/").Handler(http.StripPrefix("/web", http.FileServer(http.Dir("web/"))))
 }
 
 func (s *server) handleIndex() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello world!!!")
+		index := template.Must(template.ParseFiles(
+			"web/index.html",
+		))
+		index.Execute(w, nil)
 	}
 }
