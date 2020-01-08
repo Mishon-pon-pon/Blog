@@ -1,1 +1,5 @@
 server_port = ":3003"
+
+[store]
+database_url = "blog.db"
+db_manager = "sqlite3"

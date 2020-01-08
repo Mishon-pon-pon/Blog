@@ -6,8 +6,7 @@ import "fmt"
 
 // Start ...
 func Start(config *Config) error {
-	s := newServer()
-
-	fmt.Println("start server on port", config.Port)
-	return http.ListenAndServe(config.Port, s)
+	server := newServer(config)
+	fmt.Println("start server on port", server.config.Port)
+	return http.ListenAndServe(config.Port, server)
 }
