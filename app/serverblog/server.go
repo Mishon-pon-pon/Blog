@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Mishon-pon-pon/Blog/app/model"
 	"github.com/Mishon-pon-pon/Blog/app/store"
 	"github.com/gorilla/mux"
 )
@@ -42,9 +41,23 @@ func (s *server) configureStore(config *Config) error {
 }
 
 func (s *server) configureRouter() {
+
 	s.router.HandleFunc("/", s.handleIndex()).Methods("GET")
 	s.router.HandleFunc("/new", s.handleCreateArticle()).Methods("POST")
-	s.router.PathPrefix("/").Handler(http.StripPrefix("/web", http.FileServer(http.Dir("web/"))))
+	s.router.NotFoundHandler = NotFoundHandler()
+
+	s.router.PathPrefix("/web").Handler(http.StripPrefix("/web", http.FileServer(http.Dir("web/"))))
+
+}
+
+// NotFoundHandler ...
+func NotFoundHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tmp := template.Must(template.ParseFiles(
+			"web/errors/error404/error404.html",
+		))
+		tmp.Execute(w, nil)
+	}
 }
 
 func (s *server) handleIndex() http.HandlerFunc {
@@ -62,10 +75,6 @@ func (s *server) handleIndex() http.HandlerFunc {
 
 func (s *server) handleCreateArticle() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		a := &model.Article{
-			Title:       "GOOD",
-			TextArticle: "Hello world!!!",
-		}
-		s.store.Article().Create(a)
+
 	}
 }

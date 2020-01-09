@@ -1,8 +1,9 @@
 package serverblog
 
-import "net/http"
-
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // Start ...
 func Start(config *Config) error {
