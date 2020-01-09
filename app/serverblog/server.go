@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/Mishon-pon-pon/Blog/app/model"
 	"github.com/Mishon-pon-pon/Blog/app/store"
 	"github.com/gorilla/mux"
 )
@@ -75,6 +76,10 @@ func (s *server) handleIndex() http.HandlerFunc {
 
 func (s *server) handleCreateArticle() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
+		a := model.Article{
+			Title:       "New post",
+			TextArticle: "New post New post New post New post New post New post New post New post New post ",
+		}
+		s.store.Article().Create(&a)
 	}
 }
