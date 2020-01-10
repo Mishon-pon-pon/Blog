@@ -54,23 +54,17 @@ func (s *server) configureRouter() {
 // NotFoundHandler ...
 func NotFoundHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tmp := template.Must(template.ParseFiles(
-			"web/errors/error404/error404.html",
-		))
-		tmp.Execute(w, nil)
+		tmp("web/errors/error404/error404.html", nil, w)
 	}
 }
 
 func (s *server) handleIndex() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		index := template.Must(template.ParseFiles(
-			"web/index.html",
-		))
 		article, err := s.store.Article().GetArticles()
 		if err != nil {
 			log.Fatal(err)
 		}
-		index.Execute(w, article)
+		tmp("web/index.html", article, w)
 	}
 }
 
@@ -82,4 +76,9 @@ func (s *server) handleCreateArticle() http.HandlerFunc {
 		}
 		s.store.Article().Create(&a)
 	}
+}
+
+func tmp(path string, data interface{}, w http.ResponseWriter) {
+	tmpl := template.Must(template.ParseFiles(path))
+	tmpl.Execute(w, data)
 }
