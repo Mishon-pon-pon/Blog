@@ -1,4 +1,5 @@
 server_port = ":3003"
+session_key = "secret"
 
 [store]
 database_url = "blog.db"

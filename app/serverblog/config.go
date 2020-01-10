@@ -7,12 +7,14 @@ type Config struct {
 	ConfigPath string
 	Port       string        `toml:"server_port"`
 	Store      *store.Config `toml:"store"`
+	SessionKey string        `toml:"session_key"`
 }
 
 // NewConfig ...
 func NewConfig() *Config {
 	return &Config{
-		Port:  ":3003",
-		Store: store.NewConfig(),
+		Port:       ":3003",
+		Store:      store.NewConfig(),
+		SessionKey: "secret",
 	}
 }

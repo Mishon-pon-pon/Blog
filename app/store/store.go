@@ -11,6 +11,7 @@ type Store struct {
 	config  *Config
 	db      *sql.DB
 	article *ArticleRepository
+	user    *UserRepository
 }
 
 // New ...
@@ -52,4 +53,17 @@ func (s *Store) Article() *ArticleRepository {
 	}
 
 	return s.article
+}
+
+// User ...
+func (s *Store) User() *UserRepository {
+	if s.user != nil {
+		return s.user
+	}
+
+	s.user = &UserRepository{
+		store: s,
+	}
+
+	return s.user
 }
