@@ -10,7 +10,8 @@ import (
 )
 
 func TestServerBlog(t *testing.T) {
-	s := newServer()
+	config := NewConfig()
+	s := newServer(config)
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest(http.MethodGet, "/", nil)
 	s.handleIndex().ServeHTTP(rec, req)

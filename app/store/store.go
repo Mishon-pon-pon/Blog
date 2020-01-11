@@ -12,6 +12,7 @@ type Store struct {
 	db      *sql.DB
 	article *ArticleRepository
 	user    *UserRepository
+	session *SessionRepository
 }
 
 // New ...
@@ -66,4 +67,16 @@ func (s *Store) User() *UserRepository {
 	}
 
 	return s.user
+}
+
+// Session ...
+func (s *Store) Session() *SessionRepository {
+	if s.session != nil {
+		return s.session
+	}
+
+	s.session = &SessionRepository{
+		store: s,
+	}
+	return s.session
 }

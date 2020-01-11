@@ -25,3 +25,24 @@ sendler.addEventListener("click", function () {
         })
     }
 })
+
+function setCookie(name, value, options = {}) {
+
+  let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+// var LogOut = document.getElementById("logOut")
+// LogOut.addEventListener('click', function(e) {
+//     setCookie('auth-session', '')
+//     document.location.href = '/admin'
+// });
