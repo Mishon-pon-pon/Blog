@@ -1,6 +1,7 @@
 package serverblog
 
 import (
+	"context"
 	"fmt"
 	"html/template"
 	"log"
@@ -12,11 +13,15 @@ import (
 	"github.com/gorilla/securecookie"
 )
 
+const ctxKeyUser ctxKey = iota
+
 var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(64),
 	securecookie.GenerateRandomKey(32))
 
 var sessionName = "auth-session"
+
+type ctxKey int8
 
 type server struct {
 	router *mux.Router
@@ -50,7 +55,7 @@ func (s *server) configureStore(config *Config) error {
 }
 
 func (s *server) configureRouter() {
-
+	s.router.Use(s.Auth)
 	s.router.HandleFunc("/", s.handleIndex()).Methods("GET")
 	s.router.HandleFunc("/about", s.handleAboutPage()).Methods("GET")
 	s.router.HandleFunc("/contact", s.handleContactPage()).Methods("GET")
@@ -69,6 +74,28 @@ func NotFoundHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmp("web/errors/error404/error404.html", nil, w)
 	}
+}
+
+func (s *server) Auth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var user *model.User
+		cookie, err := r.Cookie(sessionName)
+		if err != nil {
+			fmt.Println(err)
+		}
+		if cookie != nil {
+			email := s.getCookieField(r, "email")
+			if email != nil {
+				var err error
+				user, err = s.store.User().FindByEmail(*email)
+				if err != nil {
+					fmt.Println(err)
+				}
+
+			}
+		}
+		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), ctxKeyUser, user)))
+	})
 }
 
 func (s *server) handleIndex() http.HandlerFunc {
@@ -105,11 +132,13 @@ func (s *server) handleContactPage() http.HandlerFunc {
 
 func (s *server) handleAdmin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		email := s.getCookieField(r, "email")
-		if email == "" {
+		// email := s.getCookieField(r, "email")
+		user := r.Context().Value(ctxKeyUser).(*model.User)
+		fmt.Println(user)
+		if user == nil {
 			tmp("web/auth.html", nil, w)
 		} else {
-			tmp("web/Admin.html", nil, w)
+			tmp("web/Admin.html", user, w)
 		}
 	}
 }
@@ -165,7 +194,8 @@ func clearSession(response http.ResponseWriter) {
 	http.SetCookie(response, cookie)
 }
 
-func (s *server) getCookieField(request *http.Request, field string) (email string) {
+func (s *server) getCookieField(request *http.Request, field string) *string {
+	var email string
 	if cookie, err := request.Cookie(sessionName); err == nil {
 		cookieValue := make(map[string]string)
 		if err = cookieHandler.Decode(sessionName, cookie.Value, &cookieValue); err == nil {
@@ -175,11 +205,13 @@ func (s *server) getCookieField(request *http.Request, field string) (email stri
 		if err != nil {
 			fmt.Println(err)
 		}
-		if session.Email == email {
-			return email
+		if session != nil {
+			if session.Email == email && (sessionName+"="+session.Cookie) == cookie.String() {
+				return &email
+			}
 		}
 	}
-	return ""
+	return nil
 }
 
 func (s *server) setSession(email string, response http.ResponseWriter) {
