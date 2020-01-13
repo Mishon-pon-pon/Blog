@@ -147,6 +147,8 @@ func (s *server) handleLogIn() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		email := r.FormValue("email")
 		pass := r.FormValue("password")
+		remember := r.FormValue("remember")
+		fmt.Println(remember)
 		user, _ := s.store.User().FindByEmail(email)
 		if user != nil {
 			if user.ComparePassword(pass) {
@@ -154,7 +156,7 @@ func (s *server) handleLogIn() http.HandlerFunc {
 				if err != nil {
 					http.Error(w, "error", http.StatusInternalServerError)
 				}
-				s.setSession(email, w)
+				s.setSession(email, remember, w)
 			}
 		}
 		http.Redirect(w, r, "/admin", 302)
@@ -214,15 +216,25 @@ func (s *server) getCookieField(request *http.Request, field string) *string {
 	return nil
 }
 
-func (s *server) setSession(email string, response http.ResponseWriter) {
+func (s *server) setSession(email string, remember string, response http.ResponseWriter) {
 	value := map[string]string{
 		"email": email,
 	}
 	if encoded, err := cookieHandler.Encode(sessionName, value); err == nil {
-		cookie := &http.Cookie{
-			Name:  sessionName,
-			Value: encoded,
-			Path:  "/",
+		var cookie *http.Cookie
+		if remember != "on" {
+			cookie = &http.Cookie{
+				Name:  sessionName,
+				Value: encoded,
+				Path:  "/",
+			}
+		} else {
+			cookie = &http.Cookie{
+				Name:   sessionName,
+				Value:  encoded,
+				Path:   "/",
+				MaxAge: 60 * 60 * 24 * 365,
+			}
 		}
 		err := s.store.Session().Create(email, encoded)
 		if err != nil {
