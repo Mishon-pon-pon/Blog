@@ -6,14 +6,20 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/Mishon-pon-pon/Blog/app/model"
 	"github.com/Mishon-pon-pon/Blog/app/store"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
+	"github.com/sirupsen/logrus"
 )
 
-const ctxKeyUser ctxKey = iota
+const (
+	ctxKeyUser ctxKey = iota
+	ctxKeyRequestID
+)
 
 var cookieHandler = securecookie.New(
 	securecookie.GenerateRandomKey(64),
@@ -27,6 +33,7 @@ type server struct {
 	router *mux.Router
 	config *Config
 	store  *store.Store
+	logger *logrus.Logger
 }
 
 func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -37,6 +44,7 @@ func newServer(config *Config) *server {
 	server := &server{
 		router: mux.NewRouter(),
 		config: NewConfig(),
+		logger: logrus.New(),
 	}
 
 	server.configureRouter()
@@ -55,6 +63,9 @@ func (s *server) configureStore(config *Config) error {
 }
 
 func (s *server) configureRouter() {
+	s.router.Use(s.setRequestID)
+	s.router.Use(s.logRequest)
+
 	s.router.Use(s.Auth)
 	s.router.HandleFunc("/", s.handleIndex()).Methods("GET")
 	s.router.HandleFunc("/about", s.handleAboutPage()).Methods("GET")
@@ -67,6 +78,35 @@ func (s *server) configureRouter() {
 
 	s.router.PathPrefix("/web").Handler(http.StripPrefix("/web", http.FileServer(http.Dir("web/"))))
 
+}
+
+func (s *server) logRequest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		logger := s.logger.WithFields(logrus.Fields{
+			"remote_addr": r.RemoteAddr,
+			"request_id":  r.Context().Value(ctxKeyRequestID),
+		})
+		logger.Infof("started %s %s", r.Method, r.RequestURI)
+
+		start := time.Now()
+		rw := &responseWriter{w, http.StatusOK}
+		next.ServeHTTP(rw, r)
+
+		logger.Infof(
+			"completed with %d %s in %v",
+			rw.code,
+			http.StatusText(rw.code),
+			time.Now().Sub(start),
+		)
+	})
+}
+
+func (s *server) setRequestID(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		id := uuid.New().String()
+		w.Header().Set("X-Request-ID", id)
+		next.ServeHTTP(w, r.WithContext(context.WithValue(r.Context(), ctxKeyRequestID, id)))
+	})
 }
 
 // NotFoundHandler ...
