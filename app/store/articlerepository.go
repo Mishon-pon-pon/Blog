@@ -40,3 +40,15 @@ func (r *ArticleRepository) GetArticles() ([]model.Article, error) {
 	}
 	return articles, nil
 }
+
+// FindByID ...
+func (r *ArticleRepository) FindByID(id int) (model.Article, error) {
+	a := model.Article{}
+	if err := r.store.db.QueryRow(
+		`Select * from Articles where ArticleId = $1`,
+		id,
+	).Scan(&a.ArticleID, &a.Title, &a.TextArticle); err != nil {
+		return a, err
+	}
+	return a, nil
+}

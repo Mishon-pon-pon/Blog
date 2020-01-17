@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/Mishon-pon-pon/Blog/app/model"
@@ -72,6 +73,7 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/about", s.handleAboutPage()).Methods("GET")
 	s.router.HandleFunc("/contact", s.handleContactPage()).Methods("GET")
 	s.router.HandleFunc("/admin", s.handleAdmin()).Methods("GET")
+	s.router.HandleFunc("/article", s.handleSingleArticle()).Methods("GET")
 	s.router.HandleFunc("/login", s.handleLogIn()).Methods("POST")
 	s.router.HandleFunc("/logout", s.handleLogOut()).Methods("GET")
 	s.router.HandleFunc("/new", s.handleCreateArticle()).Methods("POST")
@@ -191,6 +193,24 @@ func (s *server) handleAdmin() http.HandlerFunc {
 		} else {
 			tmp("web/Admin.html", user, w)
 		}
+	}
+}
+func (s *server) handleSingleArticle() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		tmp := template.Must(template.ParseFiles(
+			"web/single.html",
+		))
+		article, err := s.store.Article().FindByID(id)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(article)
+		tmp.Execute(w, article)
 	}
 }
 
