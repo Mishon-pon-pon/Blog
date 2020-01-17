@@ -2,6 +2,7 @@ package serverblog
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
@@ -149,12 +150,22 @@ func (s *server) handleIndex() http.HandlerFunc {
 }
 
 func (s *server) handleCreateArticle() http.HandlerFunc {
+	type reqBody struct {
+		Title       string
+		TextArticle string
+	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		a := model.Article{
-			Title:       "New post",
-			TextArticle: "New post New post New post New post New post New post New post New post New post ",
+
+		a := &reqBody{}
+		if err := json.NewDecoder(r.Body).Decode(a); err != nil {
+			fmt.Println(err)
 		}
-		s.store.Article().Create(&a)
+
+		article := &model.Article{
+			Title:       a.Title,
+			TextArticle: a.TextArticle,
+		}
+		s.store.Article().Create(article)
 	}
 }
 
