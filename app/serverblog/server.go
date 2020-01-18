@@ -74,6 +74,8 @@ func (s *server) configureRouter() {
 	s.router.HandleFunc("/contact", s.handleContactPage()).Methods("GET")
 	s.router.HandleFunc("/admin", s.handleAdmin()).Methods("GET")
 	s.router.HandleFunc("/article", s.handleSingleArticle()).Methods("GET")
+	s.router.HandleFunc("/register", s.handleRegistrationPage()).Methods("GET")
+	s.router.HandleFunc("/register", s.handleCreateUser()).Methods("POST")
 	s.router.HandleFunc("/login", s.handleLogIn()).Methods("POST")
 	s.router.HandleFunc("/logout", s.handleLogOut()).Methods("GET")
 	s.router.HandleFunc("/new", s.handleCreateArticle()).Methods("POST")
@@ -195,6 +197,28 @@ func (s *server) handleAdmin() http.HandlerFunc {
 		}
 	}
 }
+
+func (s *server) handleRegistrationPage() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		tmp := template.Must(template.ParseFiles(
+			"web/registration.html",
+		))
+		tmp.Execute(w, tmp)
+	}
+}
+
+func (s *server) handleCreateUser() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user := model.User{
+			Email:    r.FormValue("email"),
+			Password: r.FormValue("password"),
+		}
+		if err := s.store.User().Create(&user); err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+
 func (s *server) handleSingleArticle() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(r.URL.Query().Get("id"))

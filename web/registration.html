@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="web/css/bootstrap.css" rel='stylesheet' type='text/css' />
     <link href="web/css/style.css" rel='stylesheet' type='text/css' />
-    <title>Auth</title>
+    <title>Registration</title>
 </head>
 
 <body>
@@ -15,10 +15,11 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div style="margin-top: 100px;" class="col-sm-4">
-                <form method="POST" action="/login">
+                <form method="POST" action="/register">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input name="email" type="email" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                             else.</small>
                     </div>
@@ -27,17 +28,14 @@
                         <input name="password" type="password" class="form-control" id="exampleInputPassword1">
                     </div>
                     <div class="form-group form-check">
-                        <input name="remember" type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a href="/register" class="btn btn-warning">Registration</a>
+                    <button type="submit" class="btn btn-primary">Registration</button>
                     <a href="/" class="btn btn-warning">Home</a>
                 </form>
             </div>
             <div class="col-sm-4"></div>
         </div>
     </div>
+
 </body>
 
 </html>
