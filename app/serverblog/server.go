@@ -189,7 +189,7 @@ func (s *server) handleAdmin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// email := s.getCookieField(r, "email")
 		user := r.Context().Value(ctxKeyUser).(*model.User)
-		fmt.Println(user)
+		// fmt.Println(us
 		if user == nil {
 			tmp("web/auth.html", nil, w)
 		} else {
@@ -233,7 +233,7 @@ func (s *server) handleSingleArticle() http.HandlerFunc {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(article)
+		// fmt.Println(artic
 		tmp.Execute(w, article)
 	}
 }
@@ -243,7 +243,7 @@ func (s *server) handleLogIn() http.HandlerFunc {
 		email := r.FormValue("email")
 		pass := r.FormValue("password")
 		remember := r.FormValue("remember")
-		fmt.Println(remember)
+		// fmt.Println(rememb)
 		user, _ := s.store.User().FindByEmail(email)
 		if user != nil {
 			if user.ComparePassword(pass) {
@@ -347,6 +347,6 @@ func (s *server) CompareCookie(cookie string) bool {
 	if session.Cookie == cookie {
 		return true
 	}
-	fmt.Println(session)
+	// fmt.Println(sessin)
 	return false
 }
